@@ -1,0 +1,6 @@
+tk
+requests
+wikipedia
+pymorphy2
+pyttsx3
+beautifulsoup4
