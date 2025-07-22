@@ -2,7 +2,7 @@ name: Build EXE with PyInstaller
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -10,26 +10,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.8'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.8
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller
-        pip install -r requirements.txt || echo "no requirements.txt"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller wikipedia requests pymorphy2 bs4 pyttsx3
 
-    - name: Build with PyInstaller
-      run: |
-        pyinstaller --onefile reika/rei.pyw --icon reika/rei_icon.ico --name Rei
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --noconfirm --windowed --icon=reika/Rei.ico --add-data "reika/rei_data;rei_data" --add-data "reika/rei_games;rei_games" reika/rei.pyw
 
-    - name: Upload EXE
-      uses: actions/upload-artifact@v3
-      with:
-        name: Rei-EXE
-        path: dist/Rei.exe
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: rei-windows-exe
+          path: dist/
